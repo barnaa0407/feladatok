@@ -1,0 +1,98 @@
+1. Hálózatterv Ismertetése
+A hálózat három telephelyből áll, amelyek különböző szerepeket látnak el egy elképzelt vállalat működésében. A topológia biztosítja a redundáns és biztonságos kommunikációt a telephelyek között, támogatva mind az IPv4, mind az IPv6 címzési rendszereket. A hálózat számos modern szolgáltatást nyújt, beleértve a vezeték nélküli hálózatokat, VLAN-okat, és a dinamikus forgalomirányítást.
+
+Hálózat összetevői:
+Telephelyek:
+Zöld szegmens: Adminisztrációs központ.
+Kék szegmens: Fejlesztői központ.
+Sárga szegmens: Vállalati adatközpont.
+Eszközök: Cisco routerek (2811), switchek (2960-24TT, 2960-48TT), vezeték nélküli router (WRT300N), szerverek (Windows és Linux), és egy ASA tűzfal (5505).
+Hálózati kapcsolatok:
+Minden telephely redundáns kapcsolatban áll a központi Switch1-en keresztül.
+Az ASA tűzfal védi a sárga szegmens hálózatát és biztosítja a WAN-forgalmat.
+2. Telephelyek Részletes Elemzése
+2.1. Zöld Telephely (Adminisztrációs központ):
+Eszközök:
+1 db 2960-48TT Switch.
+1 db 2811 router.
+2 db PC (PC0 és PC2).
+Szolgáltatások:
+DHCP konfiguráció a PC-k számára.
+VLAN 10: Felhasználói eszközök.
+VLAN 20: Helyi adminisztrációs eszközök.
+Kapcsolatok:
+A routeren keresztül csatlakozik a központi Switch1-hez.
+A PC-k redundáns kapcsolatokkal csatlakoznak a switchhez.
+2.2. Kék Telephely (Fejlesztői központ):
+Eszközök:
+1 db 2960-24TT Switch.
+1 db 2811 router.
+1 db PC (PC1).
+1 db Windows szerver (Server0).
+Szolgáltatások:
+VLAN 30: Fejlesztői eszközök.
+VLAN 40: Szerver VLAN.
+A Windows szerver feladatai:
+DHCP és DNS szolgáltatás.
+Fájl- és nyomtatómegosztás.
+Automatizált szoftvertelepítési feladatok.
+Kapcsolatok:
+A router és switch biztosítják a kapcsolatot a központi Switch1 felé.
+2.3. Sárga Telephely (Vállalati adatközpont):
+Eszközök:
+1 db 2811 router.
+1 db Linux szerver (Server1).
+1 db ASA 5505 tűzfal.
+Szolgáltatások:
+VLAN 50: Adatközponti alkalmazottak.
+VLAN 60: Külső forgalom számára.
+A Linux szerver feladatai:
+HTTP/HTTPS szolgáltatások.
+Automatizált mentés.
+Az ASA tűzfal biztosítja a telephely védelmét az internetes forgalom ellen.
+Kapcsolatok:
+A router redundáns kapcsolaton keresztül csatlakozik a központi Switch1-hez.
+3. VLAN Konfiguráció
+A VLAN-ok biztosítják az elkülönített adatfolyamot a különböző szerepkörök számára:
+
+Zöld Telephely:
+VLAN 10 (192.168.10.0/24)
+VLAN 20 (192.168.20.0/24)
+Kék Telephely:
+VLAN 30 (192.168.30.0/24)
+VLAN 40 (192.168.40.0/24)
+Sárga Telephely:
+VLAN 50 (192.168.50.0/24)
+VLAN 60 (192.168.60.0/24)
+4. Forgalomirányítás
+4.1. Statikus Útvonalak Példa:
+A vezeték nélküli hálózat csatlakoztatásához.
+
+plaintext
+Kód másolása
+ip route 192.168.10.0 255.255.255.0 192.168.1.1
+4.2. Dinamikus Útvonalválasztás (OSPF):
+A telephelyek közötti kapcsolatok dinamikus kezeléséhez.
+
+plaintext
+Kód másolása
+router ospf 1
+ network 192.168.10.0 0.0.0.255 area 0
+ network 192.168.20.0 0.0.0.255 area 0
+5. IPv4 és IPv6 Címzés
+A hálózat támogatja az IPv4 és IPv6 címzési rendszereket:
+
+IPv4 címek:
+Zöld Telephely: 192.168.10.0/24
+Kék Telephely: 192.168.20.0/24
+Sárga Telephely: 192.168.50.0/24
+IPv6 címek:
+Zöld Telephely: 2001:db8:1::/64
+Kék Telephely: 2001:db8:2::/64
+Sárga Telephely: 2001:db8:3::/64
+6. Biztonsági Funkciók
+ACL-ek: Az adatforgalom szűrésére.
+ASA tűzfal: Védelmet biztosít a külső támadásokkal szemben.
+VPN: Biztonságos távoli elérést tesz lehetővé.
+
+
